@@ -53,13 +53,22 @@ def print_on_page():
         return
     y = 30
     for line in raw_lines:
-        canvas.create_text(30, y, text=line, anchor="nw", font=("Arial", 10))
+        if line.startswith("3^"):
+            canvas.create_text(300, y, text=line[2:], anchor="nw", font=("Arial", 34, "bold"))
+            y += 52
+        elif line.startswith("2<"):
+            canvas.create_text(300, y, text=line[2:], anchor="nw", font=("Arial", 20, "bold"))
+            y += 30
+        else:
+            canvas.create_text(300, y, text=line[2:], anchor="nw", font=("Arial", 12))
+            y += 4
         y += 20
 
 decode()
 cout_lines()
 print_on_page()
 
+#===========Scroll=========
 canvas.configure(scrollregion=canvas.bbox("all"))
 
 # Bind mousewheel for scrolling
