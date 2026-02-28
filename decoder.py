@@ -4,28 +4,26 @@ import tkinter as tk
 root = tk.Tk()
 root.title("Page")
 root.state("zoomed")
-root.geometry("850x500")
 
-#======Calculate-Screen-Dementions======
-root.update_idletasks()
-scr_width = root.winfo_width()
-scr_height = root.winfo_height()
-
-#==============Main-Canvas=============
-canvas = tk.Canvas(root, width=scr_width, height=scr_height, bg="#f8f8f8")
-canvas.pack(side="left", fill="both", expand=True)
-
-#=============Main-Page==============
-page = canvas.create_rectangle(scr_width/2-450, 5, scr_width/2+450, 1273, fill="#ffffff", outline="#cbcbcb", width=1)
+#======Calculate-Screen-Dimensions======
+scr_width = root.winfo_screenwidth()
+scr_height = root.winfo_screenheight()
 
 #=======Scroll-Wheel========
 scrollbar = tk.Scrollbar(
     master = root,
     orient = "vertical"
 )
-canvas.config(yscrollcommand = scrollbar.set)
-scrollbar.config(command = canvas.yview)
 scrollbar.pack(side="right", fill="y")
+
+#==============Main-Canvas=============
+canvas = tk.Canvas(root, width=scr_width, height=scr_height, bg="#f8f8f8", yscrollcommand=scrollbar.set)
+canvas.pack(side="left", fill="both", expand=True)
+scrollbar.config(command = canvas.yview)
+
+#=============Main-Page==============
+root.update()  # Force window to render
+page = canvas.create_rectangle(scr_width/2-450, 7, scr_width/2+450, 1273, fill="#ffffff", outline="#cbcbcb", width=1)
 
 input_path = r"C:\Rupanuga\Code\Python\Custom File ext\output.box"
 
@@ -51,16 +49,21 @@ def print_on_page():
     global raw_lines, num_of_lines
     if raw_lines is None or len(raw_lines) == 0:
         return
-    y = 30
+    y = 50
     for line in raw_lines:
-        if line.startswith("3^"):
-            canvas.create_text(300, y, text=line[2:], anchor="nw", font=("Arial", 34, "bold"))
+        center = scr_width/2 - len(line)/2
+        left = scr_width/2 - 200 # Adjust this value based on your needs
+        if line[0] == "3":
+            if line[1] == "^":
+                canvas.create_text(center, y, text=line[2:], anchor="center", font=("Space Mono", 34, "bold"))
+            else:
+                canvas.create_text(left, y, text=line[2:], anchor="center", font=("Space Mono", 34, "bold"))
             y += 52
-        elif line.startswith("2<"):
-            canvas.create_text(300, y, text=line[2:], anchor="nw", font=("Arial", 20, "bold"))
+        elif line[0] == "2":
+            canvas.create_text(300, y, text=line[2:], anchor="nw", font=("Space Mono", 20, "bold"))
             y += 30
         else:
-            canvas.create_text(300, y, text=line[2:], anchor="nw", font=("Arial", 12))
+            canvas.create_text(300, y, text=line[2:], anchor="nw", font=("Space Mono", 12))
             y += 4
         y += 20
 
