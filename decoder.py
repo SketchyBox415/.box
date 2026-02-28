@@ -23,7 +23,7 @@ scrollbar.config(command = canvas.yview)
 
 #=============Main-Page==============
 root.update()  # Force window to render
-page = canvas.create_rectangle(scr_width/2-450, 7, scr_width/2+450, 1273, fill="#ffffff", outline="#cbcbcb", width=1)
+page = canvas.create_rectangle(scr_width/2-450, 10, scr_width/2+450, 1273, fill="#ffffff", outline="#cbcbcb", width=1)
 
 input_path = r"C:\Rupanuga\Code\Python\Custom File ext\output.box"
 
@@ -49,22 +49,28 @@ def print_on_page():
     global raw_lines, num_of_lines
     if raw_lines is None or len(raw_lines) == 0:
         return
-    y = 50
+    y = 60
     for line in raw_lines:
         center = scr_width/2 - len(line)/2
-        left = scr_width/2 - 200 # Adjust this value based on your needs
+        left = 300 # Adjust this value based on your needs
         if line[0] == "3":
             if line[1] == "^":
-                canvas.create_text(center, y, text=line[2:], anchor="center", font=("Space Mono", 34, "bold"))
+                canvas.create_text(center, y, text=line[2:], anchor="center", font=("Space Mono", 34 , "bold"))
             else:
-                canvas.create_text(left, y, text=line[2:], anchor="center", font=("Space Mono", 34, "bold"))
+                canvas.create_text(left, y, text=line[2:], anchor="nw", font=("Space Mono", 34, "bold"))
             y += 52
         elif line[0] == "2":
-            canvas.create_text(300, y, text=line[2:], anchor="nw", font=("Space Mono", 20, "bold"))
+            if line[1] == "^":
+                canvas.create_text(center, y, text=line[2:], anchor="center", font=("Space Mono", 20, "bold"))
+            else:
+                canvas.create_text(left, y, text=line[2:], anchor="nw", font=("Space Mono", 20, "bold"))
             y += 30
         else:
-            canvas.create_text(300, y, text=line[2:], anchor="nw", font=("Space Mono", 12))
-            y += 4
+            if line[1] == "^":
+                canvas.create_text(center, y, text=line[2:], anchor="center", font=("Space Mono", 13))
+            else:
+                canvas.create_text(left, y, text=line[2:], anchor="nw", font=("Space Mono", 13))
+            y += 10
         y += 20
 
 decode()
